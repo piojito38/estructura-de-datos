@@ -1,3 +1,4 @@
+//Jose Moises Ortega Vasquez
 using namespace std;
 
 // ESTRUCTURA 1: Lista Enlazada – Gestor de Procesos
