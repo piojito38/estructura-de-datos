@@ -1,4 +1,3 @@
-// Eduardo Sebastián Rojas Rivas
 #include <iostream>
 using namespace std;
 
