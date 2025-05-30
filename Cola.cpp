@@ -2,46 +2,55 @@
 #include <iostream>
 using namespace std;
 
-struct NodoCola {
-    Proceso* proceso;  // Apunta a un proceso existente
-    NodoCola* siguiente;
+#define MAX 5
+
+struct Nodo {
+    int id;
+    string proceso;
+    int priority;
 };
 
-NodoCola* frente = nullptr;
-NodoCola* fin = nullptr;
+Nodo cola[MAX];
+int frente = -1;
+int final = -1;
 
-// Encolar proceso existente
-void encolarProceso(Proceso* p) {
-    NodoCola* nuevo = new NodoCola{p, nullptr};
-    if (fin == nullptr) {
-        frente = fin = nuevo;
+bool estaVacia() {
+    return frente == -1;
+}
+
+bool estaLlena() {
+    return final == MAX - 1;
+}
+
+void encolarCPU(Nodo proceso) {
+    if (estaLlena()) {
+        cout << "La cola del CPU está llena\n";
     } else {
-        fin->siguiente = nuevo;
-        fin = nuevo;
+        if (frente == -1) frente = 0;
+        final++;
+        cola[final] = proceso;
+        cout << "Proceso: " << proceso.proceso << " encolado.\n\n";
     }
 }
 
-// Desencolar proceso
-Proceso* desencolarProceso() {
-    if (frente == nullptr) return nullptr;
-
-    NodoCola* temp = frente;
-    Proceso* p = temp->proceso;
-    frente = frente->siguiente;
-
-    if (frente == nullptr) fin = nullptr; // Si se vació la cola
-    delete temp;
-    return p;
+void desencolarCPU() {
+    if (estaVacia()) {
+        cout << "La cola del CPU está vacía\n";
+    } else {
+        cout << "Proceso: " << cola[frente].proceso << " desencolado.\n";
+        frente++;
+        if (frente > final) frente = final = -1;
+    }
 }
 
-// Mostrar procesos en la cola
-void mostrarCola() {
-    NodoCola* actual = frente;
-    cout << "Procesos en cola:\n";
-    while (actual != nullptr) {
-        cout << "ID: " << actual->proceso->id 
-             << ", Nombre: " << actual->proceso->nombre 
-             << ", Prioridad: " << actual->proceso->prioridad << "\n";
-        actual = actual->siguiente;
+void showCola() {
+    if (estaVacia()) {
+        cout << "La cola del CPU está vacía.\n";
+    } else {
+        cout << "Procesos en la cola del CPU:\n";
+        for (int i = frente; i <= final; i++) {
+            cout << "Proceso: " << cola[i].proceso << "\n";
+            cout << "Prioridad: " << cola[i].priority << "\n\n";
+        }
     }
 }
